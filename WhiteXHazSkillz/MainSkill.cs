@@ -17,7 +17,6 @@ namespace WhiteXHazSkillz
 	{
 		private EventManager manager;
 		private PluginManager plugins;
-		public SkillPlayer[] SkillPlayers = new SkillPlayer[255];
 
 		public MainSkill(Main game) : base(game)
 		{
@@ -83,23 +82,33 @@ namespace WhiteXHazSkillz
 		private void OnPlayerDamage(GetDataHandlerArgs args)
 		{
 			var id = args.Data.ReadInt8();
-			var direction = args.Data.ReadInt8();
+			args.Data.ReadInt8();
 			var dmg = args.Data.ReadInt16();
 			var pvp = args.Data.ReadBoolean();
 			var crit = args.Data.ReadBoolean();
 
-			if (SkillPlayers[args.Player.Index] != null)
-				manager.InvokeHandler(new PlayerDamageEvent() { Crit = crit, Damage = dmg, HurtPlayer = SkillPlayers[args.Player.Index], DamagingPlayer = SkillPlayers[id], PVP = pvp }, EventType.PlayerTakesDamage);
+			manager.InvokeHandler(new PlayerDamageEvent() { Crit = crit, Damage = dmg, HurtPlayerIndex = args.Player.Index, DamagingEntityIndex = id, PVP = pvp }, EventType.PlayerTakesDamage);
 		}
 
 		private void OnLeave(LeaveEventArgs args)
 		{
-			SkillPlayers[args.Who] = null;
+			PlayerManager.RemovePlayer(args.Who);
 		}
 
 		private void HandlePlayerLogin(TShockAPI.Hooks.PlayerPostLoginEventArgs args)
 		{
-			SkillPlayers[args.Player.Index] = new SkillPlayer(args.Player, null);
+			try
+			{
+				SkillPlayer ply = PlayerManager.GetPlayer(args.Player.Index);
+				PlayerManager.SavePlayer(ply);
+			}
+			catch (Exception e)
+			{
+				Console.WriteLine(e.Message);
+			}
+
+			var player = PlayerManager.LoadPlayer(args.Player);
+			PlayerManager.ActivatePlayer(player, player.Player.Index);
 		}
 	}
 }

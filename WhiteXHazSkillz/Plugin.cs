@@ -21,6 +21,7 @@ namespace WhiteXHazSkillz
 		{
 			this.Dispose(false);
 		}
+
 		public void Dispose()
 		{
 			this.Dispose(true);
