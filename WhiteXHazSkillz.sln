@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WhiteXHazSkillz", "WhiteXHazSkillz\WhiteXHazSkillz.csproj", "{3D63ED42-F44B-4843-8152-557CE381549C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestPlugin", "TestPlugin\TestPlugin.csproj", "{99154B3D-29E4-47C8-80C9-EAE5CB3F043B}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{9D30FF86-45DC-4BBD-941C-D525B95EE101}"
+	ProjectSection(SolutionItems) = preProject
+		TextFile1.txt = TextFile1.txt
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{3D63ED42-F44B-4843-8152-557CE381549C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3D63ED42-F44B-4843-8152-557CE381549C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3D63ED42-F44B-4843-8152-557CE381549C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3D63ED42-F44B-4843-8152-557CE381549C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{99154B3D-29E4-47C8-80C9-EAE5CB3F043B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{99154B3D-29E4-47C8-80C9-EAE5CB3F043B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{99154B3D-29E4-47C8-80C9-EAE5CB3F043B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{99154B3D-29E4-47C8-80C9-EAE5CB3F043B}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
