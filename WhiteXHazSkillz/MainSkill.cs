@@ -76,7 +76,25 @@ namespace WhiteXHazSkillz
 			{
 				if (type == PacketTypes.PlayerDamage)
 					OnPlayerDamage(new GetDataHandlerArgs(player, data));
+				if (type == PacketTypes.NpcStrike)
+					OnNpcDamaged(new GetDataHandlerArgs(player, data));
 			}
+		}
+
+		private void OnNpcDamaged(GetDataHandlerArgs args)
+		{
+			var npcid = args.Data.ReadInt16();
+			var damage = args.Data.ReadInt16();
+			args.Data.ReadSingle();
+			args.Data.ReadInt8();
+			var crit = args.Data.ReadBoolean();
+
+			manager.InvokeHandler(new NpcDamageEvent() { Crit = crit, Damage = damage, PlayerIndex = args.Player.Index, NpcIndex = npcid }, EventType.NpcTakesDamage);
+
+			int damageDone = damage - (int)Math.Ceiling(Main.npc[npcid].defense*.5f);
+			damageDone = (crit ? damageDone*2 : damageDone);
+			if(damageDone >= Main.npc[npcid].life)
+				manager.InvokeHandler(new NpcKilledEvent() { Crit = crit, Damage = damage, PlayerIndex = args.Player.Index, NpcIndex = npcid }, EventType.NpcIsKilled);
 		}
 
 		private void OnPlayerDamage(GetDataHandlerArgs args)
@@ -88,6 +106,9 @@ namespace WhiteXHazSkillz
 			var crit = args.Data.ReadBoolean();
 
 			manager.InvokeHandler(new PlayerDamageEvent() { Crit = crit, Damage = dmg, HurtPlayerIndex = args.Player.Index, DamagingEntityIndex = id, PVP = pvp }, EventType.PlayerTakesDamage);
+			
+			if(pvp)
+				manager.InvokeHandler(new PlayerDamageEvent() { Crit = crit, Damage = dmg, HurtPlayerIndex = args.Player.Index, DamagingEntityIndex = id, PVP = pvp }, EventType.PlayerDoesDamage);
 		}
 
 		private void OnLeave(LeaveEventArgs args)

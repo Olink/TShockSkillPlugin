@@ -8,6 +8,8 @@ namespace WhiteXHazSkillz.Events
 	public enum EventType
 	{
 		PlayerTakesDamage,
-		PlayerDoesDamage
+		PlayerDoesDamage,
+		NpcTakesDamage,
+		NpcIsKilled
 	}
 }

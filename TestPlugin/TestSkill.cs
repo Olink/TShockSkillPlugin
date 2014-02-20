@@ -23,6 +23,9 @@ namespace TestPlugin
 		public override void Initialize()
 		{
 			register.RegisterSkillHandler<PlayerDamageEvent>(this, OnPlayerTakesDamage, EventType.PlayerTakesDamage);
+			register.RegisterSkillHandler<PlayerDamageEvent>(this, OnPlayerDoesDamage, EventType.PlayerDoesDamage);
+			register.RegisterSkillHandler<NpcKilledEvent>(this, OnPlayerKillsNPC, EventType.NpcIsKilled);
+			register.RegisterSkillHandler<NpcDamageEvent>(this, OnPlayerDamagesNPC, EventType.NpcTakesDamage);
 			TShockAPI.Commands.ChatCommands.Add(new Command("", AddSkillPoint, "ts"));
 		}
 
@@ -69,7 +72,7 @@ namespace TestPlugin
 				}
 
 				if(info.Value > 0 && !args.PVP)
-					FireRocket(player, args.Damage, info.Value);
+					FireRocket(player, args.Damage, 1);
 			}
 			catch (Exception e)
 			{
@@ -78,13 +81,70 @@ namespace TestPlugin
 			
 		}
 
+		private void OnPlayerDoesDamage(PlayerDamageEvent args)
+		{
+			//hurt another player
+		}
+
+		private void OnPlayerKillsNPC(NpcKilledEvent args)
+		{
+			try
+			{
+				SkillPlayer player = PlayerManager.GetPlayer(args.PlayerIndex);
+				SkillInformation info = player.GetSkillInformation(Name);
+
+				if (info == null)
+				{
+					info = new SkillInformation() { Name = this.Name, Value = 0 };
+					player.SetSkillInformation(info);
+					return;
+				}
+
+				if (info.Value > 0)
+				{
+					FireRocket(player, args.Damage, info.Value);
+				}
+			}
+			catch (Exception e)
+			{
+				Console.WriteLine(e.Message);
+			}
+		}
+
+		private void OnPlayerDamagesNPC(NpcDamageEvent args)
+		{
+			try
+			{
+				SkillPlayer player = PlayerManager.GetPlayer(args.PlayerIndex);
+				SkillInformation info = player.GetSkillInformation(Name);
+
+				if (info == null)
+				{
+					info = new SkillInformation() { Name = this.Name, Value = 0 };
+					player.SetSkillInformation(info);
+					return;
+				}
+
+				if (info.Value > 0)
+				{
+					double ratio = Math.Min(info.Value / 20.0, 1.0);
+					int health = (int)Math.Ceiling(ratio * args.Damage);
+					player.Player.Heal(health);
+				}
+			}
+			catch (Exception e)
+			{
+				Console.WriteLine(e.Message);
+			}
+		}
+
 		private void FireRocket(SkillPlayer origin, int damage, int strikes)
 		{
 			for (int i = 0; i < strikes; i++)
 			{
-				int xOffset = rand.Next(-5 * strikes, 5 * strikes);
+				int xOffset = rand.Next(-10 * strikes, 10 * strikes);
 				int projectileIndex = Projectile.NewProjectile(origin.Player.TPlayer.position.X + xOffset,
-					origin.Player.TPlayer.position.Y - 300, 0, 10, 207, damage, -10, origin.Player.Index, 0, 0);
+					origin.Player.TPlayer.position.Y - 300, 0, 3, 207, damage, 50, origin.Player.Index, 0, 0);
 				NetMessage.SendData(27, -1, -1, "", projectileIndex);
 			}
 		}

@@ -60,6 +60,8 @@
     <Compile Include="EventHandlerList.cs" />
     <Compile Include="EventManager.cs" />
     <Compile Include="EventRegister.cs" />
+    <Compile Include="Events\NpcKilledEvent.cs" />
+    <Compile Include="Events\NpcDamageEvent.cs" />
     <Compile Include="Events\EventType.cs" />
     <Compile Include="MainSkill.cs" />
     <Compile Include="Events\PlayerDamageEvent.cs" />
