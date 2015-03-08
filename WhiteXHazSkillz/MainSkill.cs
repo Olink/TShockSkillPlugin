@@ -12,7 +12,7 @@ using WhiteXHazSkillz.Events;
 
 namespace WhiteXHazSkillz
 {
-	[ApiVersion(1, 15)]
+	[ApiVersion(1, 17)]
 	public class MainSkill : TerrariaPlugin
 	{
 		private EventManager manager;
